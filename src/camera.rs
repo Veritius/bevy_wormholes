@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, render::camera::RenderTarget};
 use crate::Wormhole;
 
 /// A camera that renders wormhole surfaces.
@@ -18,6 +18,39 @@ pub struct WormholeCamera {
 pub struct WormholeCameraBundle {
     pub camera: Camera3dBundle,
     pub comp: WormholeCamera,
+    _hidden: (), // prevent manual construction
+}
+
+impl WormholeCameraBundle {
+    /// Creates a new [`WormholeCameraBundle`] that renders to `handle` at order `-1`.
+    pub fn new(
+        target: Entity,
+        handle: Handle<Image>,
+    ) -> Self {
+        Self {
+            camera: Camera3dBundle {
+                camera: Camera {
+                    order: -1,
+                    target: RenderTarget::Image(handle),
+                    ..default()
+                },
+                ..default()
+            },
+            comp: WormholeCamera { target },
+            _hidden: (),
+        }
+    }
+
+    /// Creates a new [`WormholeCameraBundle`] that renders to `handle` at order `-1`.
+    pub fn new_with_order(
+        target: Entity,
+        handle: Handle<Image>,
+        order: isize,
+    ) -> Self {
+        let mut bundle = Self::new(target, handle);
+        bundle.camera.camera.order = order;
+        return bundle;
+    }
 }
 
 pub(super) fn camera_parent_check_system(
