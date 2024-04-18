@@ -25,7 +25,7 @@ impl Plugin for WormholesPlugin {
             camera_transform_update_system,
         ).in_set(WormholeSystem::Transform));
 
-        embedded_asset!(app, "bevy_wormholes", "surface.wgsl");
+        embedded_asset!(app, "surface.wgsl");
     }
 }
 

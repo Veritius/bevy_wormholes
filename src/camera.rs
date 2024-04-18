@@ -65,8 +65,8 @@ pub(super) fn camera_parent_check_system(
 }
 
 pub(super) fn camera_transform_update_system(
-    mut cameras: Query<(&WormholeCamera, &mut Transform, &mut GlobalTransform)>,
-    wormholes: Query<&GlobalTransform, With<Wormhole>>,
+    mut cameras: Query<(&WormholeCamera, &mut Transform, &mut GlobalTransform), Without<Wormhole>>,
+    wormholes: Query<&GlobalTransform, (With<Wormhole>, Without<WormholeCamera>)>,
 ) {
     for (camera, mut transform, mut global_transform) in cameras.iter_mut() {
         todo!()
