@@ -1,0 +1,14 @@
+[package]
+name="bevy_wormholes"
+version="0.1.0"
+edition="2021"
+authors=["Veritius <veritiusgaming@gmail.com>"]
+license="MIT OR Apache-2.0"
+description="Adds magic spacetime portals to Bevy."
+repository="https://github.com/veritius/bevy_wormholes/"
+keywords=["bevy", "gamedev", "rendering"]
+
+[dependencies.bevy]
+version = "0.13"
+default-features = false
+features = ["bevy_asset", "bevy_core_pipeline", "bevy_render"]
