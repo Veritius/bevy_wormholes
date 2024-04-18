@@ -11,4 +11,9 @@ keywords=["bevy", "gamedev", "rendering"]
 [dependencies.bevy]
 version = "0.13"
 default-features = false
-features = ["bevy_asset", "bevy_core_pipeline", "bevy_render"]
+features = [
+    "bevy_asset",
+    "bevy_core_pipeline",
+    "bevy_pbr",
+    "bevy_render"
+]

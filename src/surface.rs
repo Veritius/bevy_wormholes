@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy::render::render_resource::{Extent3d, TextureDescriptor, TextureDimension, TextureFormat, TextureUsages};
+use bevy::render::render_resource::{AsBindGroup, Extent3d, ShaderRef, TextureDescriptor, TextureDimension, TextureFormat, TextureUsages};
 
 /// [`TextureUsages`] needed for a functional [`Image`] used in drawing wormholes.
 // Using an integer is a hack to get around bitwise OR being unusable in a const context.
@@ -28,7 +28,7 @@ pub struct WormholeBundle {
     pub visibility: VisibilityBundle,
     pub wormhole: Wormhole,
     pub mesh: Handle<Mesh>,
-    pub image: Handle<Image>,
+    pub material: Handle<WormholeMaterial>,
 }
 
 impl WormholeBundle {
@@ -43,7 +43,30 @@ impl WormholeBundle {
         resolution: UVec2,
         meshes: &mut Assets<Mesh>,
         images: &mut Assets<Image>,
+        materials: &mut Assets<WormholeMaterial>,
     ) -> Self {
+        let image = images.add(Image {
+            texture_descriptor: TextureDescriptor {
+                label: None,
+                size: Extent3d {
+                    width: resolution.x,
+                    height: resolution.y,
+                    ..default()
+                },
+                mip_level_count: 1,
+                sample_count: 1,
+                dimension: TextureDimension::D2,
+                format: TextureFormat::Bgra8Unorm,
+                usage: WORMHOLE_TEXTURE_USAGES,
+                view_formats: &[],
+            },
+            ..default()
+        });
+
+        let material = materials.add(WormholeMaterial {
+            texture: image,
+        });
+
         Self {
             transform: TransformBundle::default(),
             visibility: VisibilityBundle::default(),
@@ -51,23 +74,23 @@ impl WormholeBundle {
                 counterpart: Entity::PLACEHOLDER,
             },
             mesh: meshes.add(Plane3d::new(Vec3::Y).mesh().size(dimensions.x, dimensions.y)),
-            image: images.add(Image {
-                texture_descriptor: TextureDescriptor {
-                    label: None,
-                    size: Extent3d {
-                        width: resolution.x,
-                        height: resolution.y,
-                        ..default()
-                    },
-                    mip_level_count: 1,
-                    sample_count: 1,
-                    dimension: TextureDimension::D2,
-                    format: TextureFormat::Bgra8Unorm,
-                    usage: WORMHOLE_TEXTURE_USAGES,
-                    view_formats: &[],
-                },
-                ..default()
-            }),
+            material,
         }
+    }
+}
+
+/// A simple shader for rendering wormhole surfaces.
+/// You can also use [`StandardMaterial`] with the same `Handle<Image>` if you want.
+#[derive(Debug, Clone, TypePath, Asset, AsBindGroup)]
+#[allow(missing_docs)]
+pub struct WormholeMaterial {
+    #[texture(0)]
+    #[sampler(1)]
+    pub texture: Handle<Image>,
+}
+
+impl Material for WormholeMaterial {
+    fn fragment_shader() -> ShaderRef {
+        "embedded://bevy_wormholes/surface.wgsl".into()
     }
 }
