@@ -15,3 +15,5 @@ pub struct WormholeCameraBundle {
     pub camera: Camera3dBundle,
     pub comp: WormholeCamera,
 }
+
+// fn on_wormhole_addition
