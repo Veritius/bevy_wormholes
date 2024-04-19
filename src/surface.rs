@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy::render::extract_component::ExtractComponent;
 use bevy::render::render_resource::{AsBindGroup, Extent3d, ShaderRef, TextureDescriptor, TextureDimension, TextureFormat, TextureUsages};
 
 /// [`TextureUsages`] needed for a functional [`Image`] used in drawing wormholes.
@@ -13,7 +14,7 @@ fn correct_usages_test() {
 }
 
 /// A wormhole.
-#[derive(Debug, Component, Reflect)]
+#[derive(Debug, Clone, Component, Reflect, ExtractComponent)]
 #[reflect(Debug, Component)]
 pub struct Wormhole {
     /// The other side of the wormhole.

@@ -2,6 +2,7 @@
 #![warn(missing_docs)]
 
 mod camera;
+mod graph;
 mod surface;
 
 pub use camera::*;
