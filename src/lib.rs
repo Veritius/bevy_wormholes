@@ -5,7 +5,7 @@ mod builder;
 mod camera;
 mod surface;
 
-pub use builder::{WormholeBuilder, BuiltWormholeData};
+pub use builder::{WormholeBuilder, WormholeBuilderContext, BuiltWormholeData};
 pub use camera::*;
 pub use surface::*;
 

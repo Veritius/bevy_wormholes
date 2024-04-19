@@ -8,11 +8,42 @@ fn main() {
     let mut app = App::new();
     app.add_plugins((DefaultPlugins, WormholesPlugin));
 
-    app.add_systems(Startup, (spawn_props, setup_camera));
+    app.add_systems(Startup, (spawn_wormholes, spawn_props, setup_camera));
     app.add_systems(Update, flycam_system);
 
     app.run();
 }
+
+fn spawn_wormholes(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut images: ResMut<Assets<Image>>,
+    mut shaders: ResMut<Assets<WormholeShader>>,
+) {
+    let mut builder = WormholeBuilder::new();
+
+    builder.both(&|c| {
+        c.with_dimensions(Vec2::new(2.0, 5.0));
+    });
+
+    builder.orange(|c| {
+        c.with_transform(Transform::from_translation(Vec3::new(-5.0, 0.0, 0.0)));
+    });
+
+    builder.blue(|c| {
+        c.with_transform(Transform::from_translation(Vec3::new(5.0, 0.0, 0.0)));
+    });
+
+    let context = WormholeBuilderContext {
+        commands: &mut commands,
+        meshes: &mut meshes,
+        images: &mut images,
+        shaders: &mut shaders,
+    };
+
+    builder.build(context).unwrap();
+}
+
 
 fn spawn_props(
     mut commands: Commands,
