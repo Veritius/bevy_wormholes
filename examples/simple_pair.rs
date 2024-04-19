@@ -1,4 +1,4 @@
-use bevy::{input::mouse::MouseMotion, prelude::*, window::{CursorGrabMode, PrimaryWindow}};
+use bevy::{input::mouse::MouseMotion, pbr::{light_consts::lux::OVERCAST_DAY, CascadeShadowConfigBuilder}, prelude::*, window::{CursorGrabMode, PrimaryWindow}};
 use bevy_wormholes::*;
 
 const MOUSE_SENSITIVITY: Vec2 = Vec2::new(0.001, 0.001);
@@ -19,31 +19,58 @@ fn spawn_props(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    // Spawn a light
-    commands.spawn(PointLightBundle {
-        point_light: PointLight { range: 100.0, ..default() },
-        transform: Transform::from_xyz(0.0, 10.0, 0.0),
+    // Spawn a directional light
+    commands.spawn(DirectionalLightBundle {
+        directional_light: DirectionalLight {
+            illuminance: OVERCAST_DAY,
+            shadows_enabled: true,
+            ..default()
+        },
+        transform: Transform::from_xyz(2.0, 5.0, 1.0).looking_at(Vec3::ZERO, Vec3::Y),
+        cascade_shadow_config: CascadeShadowConfigBuilder {
+            first_cascade_far_bound: 4.0,
+            maximum_distance: 100.0,
+            ..default()
+        }.into(),
         ..default()
     });
 
-    // Spawn a plane as the floor
+    // Spawn two planes
+    let plane_mesh = meshes.add(Plane3d::new(Vec3::Y).mesh().size(5.0, 10.0));
     commands.spawn(PbrBundle {
-        mesh: meshes.add(Plane3d::new(Vec3::Y).mesh().size(100.0, 100.0)),
-        material: materials.add(StandardMaterial { base_color: Color::GREEN, ..default() }),
+        mesh: plane_mesh.clone(),
+        material: materials.add(StandardMaterial { base_color: Color::BLUE, ..default() }),
+        transform: Transform::from_xyz(3.5, 0.0, 0.0),
         ..default()
     });
+    commands.spawn(PbrBundle {
+        mesh: plane_mesh.clone(),
+        material: materials.add(StandardMaterial { base_color: Color::ORANGE, ..default() }),
+        transform: Transform::from_xyz(-3.5, 0.0, 0.0),
+        ..default()
+    });
+
+    // Identical cubes are spawned at all these positions.
+    static CUBE_POSITIONS: &[[f32;2]] = &[
+        [-5.0, -1.0],
+        [-2.0, 3.0],
+        [3.0, 4.0],
+        [4.0, -2.0],
+    ];
 
     // Shared cube assets
-    let cube_mesh = meshes.add(Cuboid::new(2.0, 2.0, 2.0));
+    let cube_mesh = meshes.add(Cuboid::new(1.0, 1.0, 1.0));
     let cube_mat = materials.add(StandardMaterial { base_color: Color::WHITE, ..default() });
 
-    // Spawn a cube
-    commands.spawn(PbrBundle {
-        mesh: cube_mesh,
-        material: cube_mat,
-        transform: Transform::from_xyz(6.0, 1.0, 2.0),
-        ..default()
-    });
+    // Spawn some cubes
+    for pos in CUBE_POSITIONS {
+        commands.spawn(PbrBundle {
+            mesh: cube_mesh.clone(),
+            material: cube_mat.clone(),
+            transform: Transform::from_translation(Vec3::new(pos[0], 0.5, pos[1])),
+            ..default()
+        });
+    }
 }
 
 #[derive(Component)]
