@@ -5,13 +5,11 @@ mod builder;
 mod camera;
 mod surface;
 
-pub mod render;
-
 pub use builder::{WormholeBuilder, BuiltWormholeData};
 pub use camera::*;
 pub use surface::*;
 
-use bevy::{prelude::*, transform::TransformSystem};
+use bevy::{asset::embedded_asset, prelude::*, transform::TransformSystem};
 
 /// Adds wormholes.
 pub struct WormholesPlugin;
@@ -28,6 +26,8 @@ impl Plugin for WormholesPlugin {
             camera_parent_check_system,
             camera_transform_update_system,
         ).in_set(WormholeSystem::Transform));
+
+        embedded_asset!(app, "surface.wgsl");
     }
 }
 

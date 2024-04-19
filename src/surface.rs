@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy::render::render_resource::TextureUsages;
+use bevy::render::render_resource::{AsBindGroup, ShaderRef, TextureUsages};
 
 /// [`TextureUsages`] needed for a functional [`Image`] used in drawing wormholes.
 // Using an integer is a hack to get around bitwise OR being unusable in a const context.
@@ -18,4 +18,34 @@ fn correct_usages_test() {
 pub struct Wormhole {
     /// The other side of the wormhole.
     pub counterpart: Entity,
+}
+
+/// Shader for drawing wormhole surfaces.
+#[derive(Debug, Clone, Component, Asset, AsBindGroup, Reflect)]
+#[reflect(Debug, Component)]
+pub struct WormholeShader {
+    /// The texture that the camera renders to.
+    #[texture(0)]
+    #[sampler(1)]
+    pub texture: Handle<Image>,
+
+    /// A stencil mask that hides parts of the texture.
+    #[texture(2)]
+    #[sampler(3)]
+    pub stencil: Option<Handle<Image>>,
+}
+
+impl WormholeShader {
+    /// The asset path for the shader.
+    pub const SHADER_ASSET_PATH: &'static str = "embedded://bevy_wormholes/surface.wgsl";
+}
+
+impl Material for WormholeShader {
+    fn vertex_shader() -> ShaderRef {
+        Self::SHADER_ASSET_PATH.into()
+    }
+
+    fn fragment_shader() -> ShaderRef {
+        Self::SHADER_ASSET_PATH.into()
+    }
 }

@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::camera::RenderTarget};
+use bevy::prelude::*;
 
 /// A builder for wormholes. Automatically configures wormholes.
 pub struct WormholeBuilder {
