@@ -2,9 +2,17 @@
 
 use bevy::prelude::*;
 use bevy::render::extract_component::ExtractComponent;
-use bevy::render::render_graph::{Node, NodeRunError, RenderGraphContext, RenderLabel};
+use bevy::render::render_graph::{Node, NodeRunError, RenderGraph, RenderGraphContext, RenderLabel};
 use bevy::render::render_resource::{BindGroupLayout, CachedRenderPipelineId};
 use bevy::render::renderer::RenderContext;
+use bevy::render::RenderApp;
+
+pub(super) fn setup_rendering(app: &mut App) {
+    let render_app = app.sub_app_mut(RenderApp);
+
+    let mut graph = render_app.world.resource_mut::<RenderGraph>();
+    graph.add_node(WormholeRenderLabel, WormholeRenderNode);
+}
 
 /// [`RenderLabel`] for wormhole rendering.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, RenderLabel)]
@@ -24,18 +32,6 @@ impl Node for WormholeRenderNode {
     }
 }
 
-/// The shader used to draw wormholes.
-#[derive(Debug, Clone, Component, ExtractComponent, Reflect)]
-#[reflect(Debug, Component)]
-pub struct WormholeShader {
-    /// The texture that the [`WormholeCamera`](crate::WormholeCamera) renders to.
-    pub texture: Handle<Image>,
-
-    /// The stencil texture that masks off parts of the wormhole surface.
-    /// `1.0` means fully visible, `0.0` means fully transparent.
-    pub stencil: Option<Handle<Image>>,
-}
-
 #[derive(Resource)]
 pub(crate) struct WormholeShaderData {
     pub pipeline_id: CachedRenderPipelineId,
@@ -46,4 +42,16 @@ impl FromWorld for WormholeShaderData {
     fn from_world(world: &mut World) -> Self {
         todo!()
     }
+}
+
+/// The shader used to draw wormholes.
+#[derive(Debug, Clone, Component, ExtractComponent, Reflect)]
+#[reflect(Debug, Component)]
+pub struct WormholeShader {
+    /// The texture that the [`WormholeCamera`](crate::WormholeCamera) renders to.
+    pub texture: Handle<Image>,
+
+    /// The stencil texture that masks off parts of the wormhole surface.
+    /// `1.0` means fully visible, `0.0` means fully transparent.
+    pub stencil: Option<Handle<Image>>,
 }

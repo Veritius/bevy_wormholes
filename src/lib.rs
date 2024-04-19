@@ -11,7 +11,7 @@ pub use builder::{WormholeBuilder, BuiltWormholeData};
 pub use camera::*;
 pub use surface::*;
 
-use bevy::{asset::embedded_asset, prelude::*, transform::TransformSystem};
+use bevy::{prelude::*, transform::TransformSystem};
 
 /// Adds wormholes.
 pub struct WormholesPlugin;
