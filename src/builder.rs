@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-/// A builder for wormholes.
+/// A builder for wormholes. Automatically configures wormholes.
 pub struct WormholeBuilder {
     camera: WormholeCameraConfig,
     orange: WormholeSideConfig,
@@ -18,7 +18,7 @@ impl WormholeBuilder {
     }
 
     /// Applies the `Builder`.
-    pub fn apply(self, commands: &mut Commands) -> Result<(), ()> {
+    pub fn apply(self, commands: &mut Commands) -> Result<BuiltWormholeEntities, ()> {
         // Generate ids early since entities reference eachother
         let camera_id = commands.spawn_empty().id();
         let orange_id = commands.spawn_empty().id();
@@ -94,4 +94,14 @@ impl WormholeCameraConfig {
         self.render_order = order;
         return self;
     }
+}
+
+/// Output by [`WormholeBuilder`].
+pub struct BuiltWormholeEntities {
+    /// The ID of the wormhole camera.
+    pub camera_id: Entity,
+    /// The ID of the orange wormhole entity.
+    pub orange_id: Entity,
+    /// The ID of the blue wormhole entity.
+    pub blue_id:   Entity,
 }

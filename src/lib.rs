@@ -5,7 +5,7 @@ mod builder;
 mod camera;
 mod surface;
 
-pub use builder::WormholeBuilder;
+pub use builder::{WormholeBuilder, BuiltWormholeEntities};
 pub use camera::*;
 pub use surface::*;
 
