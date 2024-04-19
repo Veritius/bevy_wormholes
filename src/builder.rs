@@ -211,6 +211,7 @@ fn build_wormholes(
     let orange_mesh = build_mesh(context.meshes, &builder.orange);
     context.commands.entity(orange_id).insert((
         MaterialMeshBundle {
+            transform: builder.orange.transform,
             mesh: orange_mesh.clone(),
             material: context.shaders.add(WormholeShader {
                 texture: render_image.clone(),
@@ -227,6 +228,7 @@ fn build_wormholes(
     let blue_mesh = build_mesh(context.meshes, &builder.blue);
     context.commands.entity(orange_id).insert((
         MaterialMeshBundle {
+            transform: builder.blue.transform,
             mesh: blue_mesh.clone(),
             material: context.shaders.add(WormholeShader {
                 texture: render_image.clone(),
