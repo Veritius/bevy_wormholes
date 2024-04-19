@@ -27,6 +27,8 @@ impl Plugin for WormholesPlugin {
             camera_transform_update_system,
         ).in_set(WormholeSystem::Transform));
 
+        app.init_asset::<WormholeShader>();
+
         embedded_asset!(app, "surface.wgsl");
     }
 }
