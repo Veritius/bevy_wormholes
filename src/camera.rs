@@ -1,9 +1,12 @@
-use bevy::{prelude::*, render::camera::RenderTarget};
+use bevy::prelude::*;
 use crate::Wormhole;
 
-/// Used as the reference point for the point of view used to render wormholes.
-/// There can be at most one entity with this component.
-/// If there are none, wormholes won't update.
+/// Two wormhole entities, by id.
+#[allow(missing_docs)]
+pub struct WormholePair(pub [Entity; 2]);
+
+/// The main camera used in wormhole rendering.
+/// Wormholes will be rendered to look correct from this entity's point of view.
 #[derive(Debug, Component, Reflect)]
 #[reflect(Debug, Component)]
 pub struct WormholeObserver;
@@ -17,49 +20,6 @@ pub struct WormholeObserver;
 pub struct WormholeCamera {
     /// The entity IDs of the wormhole pair.
     pub wormholes: [Entity; 2],
-}
-
-/// A bundle for creating a [`WormholeCamera`].
-#[derive(Bundle)]
-#[allow(missing_docs)]
-pub struct WormholeCameraBundle {
-    pub camera: Camera3dBundle,
-    pub comp: WormholeCamera,
-    _hidden: (), // prevent manual construction
-}
-
-impl WormholeCameraBundle {
-    /// Creates a new [`WormholeCameraBundle`] that renders to `handle` at order `-1`.
-    pub fn new(
-        target: Entity,
-        handle: Handle<Image>,
-    ) -> Self {
-        Self {
-            camera: Camera3dBundle {
-                camera: Camera {
-                    order: -1,
-                    target: RenderTarget::Image(handle),
-                    ..default()
-                },
-                ..default()
-            },
-            comp: WormholeCamera {
-                wormholes: [Entity::PLACEHOLDER; 2],
-            },
-            _hidden: (),
-        }
-    }
-
-    /// Creates a new [`WormholeCameraBundle`] that renders to `handle` at order `-1`.
-    pub fn new_with_order(
-        target: Entity,
-        handle: Handle<Image>,
-        order: isize,
-    ) -> Self {
-        let mut bundle = Self::new(target, handle);
-        bundle.camera.camera.order = order;
-        return bundle;
-    }
 }
 
 pub(super) fn camera_parent_check_system(
