@@ -1,13 +1,15 @@
 //! Advanced tools for control over rendering.
 
 use bevy::prelude::*;
-use bevy::render::extract_component::ExtractComponent;
+use bevy::render::extract_component::{ExtractComponent, ExtractComponentPlugin};
 use bevy::render::render_graph::{Node, NodeRunError, RenderGraph, RenderGraphContext, RenderLabel};
 use bevy::render::render_resource::{BindGroupLayout, CachedRenderPipelineId};
 use bevy::render::renderer::RenderContext;
 use bevy::render::RenderApp;
 
 pub(super) fn setup_rendering(app: &mut App) {
+    app.add_plugins(ExtractComponentPlugin::<WormholeShader>::default());
+
     let render_app = app.sub_app_mut(RenderApp);
 
     let mut graph = render_app.world.resource_mut::<RenderGraph>();
