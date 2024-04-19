@@ -1,9 +1,11 @@
 #![doc = include_str!("../README.md")]
 #![warn(missing_docs)]
 
+mod builder;
 mod camera;
 mod surface;
 
+pub use builder::WormholeBuilder;
 pub use camera::*;
 pub use surface::*;
 
