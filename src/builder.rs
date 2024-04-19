@@ -155,6 +155,7 @@ impl WormholeCameraConfig {
 }
 
 /// Data required to call [`build`](WormholeBuilder::build) on a [`WormholeBuilder`].
+#[allow(missing_docs)]
 pub struct WormholeBuilderContext<'a, 'w, 's> {
     pub commands: &'a mut Commands<'w, 's>,
     pub meshes: &'a mut Assets<Mesh>,
@@ -252,14 +253,16 @@ fn build_target_image(
     images: &mut Assets<Image>,
     resolution: UVec2,
 ) -> Handle<Image> {
-    images.add(Image {
+    let size = Extent3d {
+        width: resolution.x,
+        height: resolution.y,
+        ..default()
+    };
+
+    let mut image = Image {
         texture_descriptor: TextureDescriptor {
             label: None,
-            size: Extent3d {
-                width: resolution.x,
-                height: resolution.y,
-                ..default()
-            },
+            size,
             mip_level_count: 1,
             sample_count: 1,
             dimension: TextureDimension::D2,
@@ -268,7 +271,11 @@ fn build_target_image(
             view_formats: &[],
         },
         ..default()
-    })
+    };
+
+    image.resize(size);
+
+    images.add(image)
 }
 
 fn build_mesh(
