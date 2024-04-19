@@ -183,7 +183,7 @@ fn flycam_system(
     }
 
     // Direction based on rotation
-    let up = *transform.up();
+    let up = Vec3::Y;
     let fwd = *transform.forward();
     let rgt = *transform.right();
 
