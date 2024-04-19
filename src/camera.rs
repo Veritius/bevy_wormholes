@@ -15,8 +15,8 @@ pub struct WormholeObserver;
 #[derive(Debug, Component, Reflect)]
 #[reflect(Debug, Component)]
 pub struct WormholeCamera {
-    /// The wormhole's entity ID.
-    pub target: Entity,
+    /// The entity IDs of the wormhole pair.
+    pub wormholes: [Entity; 2],
 }
 
 /// A bundle for creating a [`WormholeCamera`].
@@ -43,7 +43,9 @@ impl WormholeCameraBundle {
                 },
                 ..default()
             },
-            comp: WormholeCamera { target },
+            comp: WormholeCamera {
+                wormholes: [Entity::PLACEHOLDER; 2],
+            },
             _hidden: (),
         }
     }

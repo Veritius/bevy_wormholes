@@ -56,7 +56,8 @@ impl WormholeBuilder {
 pub struct WormholeSideConfig {
     transform: Transform,
     dimensions: Vec2,
-    resolution: UVec2,
+    resolution: Option<UVec2>,
+    rend_image: Option<Handle<Image>>,
     mask_image: Option<Handle<Image>>,
 }
 
@@ -66,7 +67,8 @@ impl WormholeSideConfig {
         Self {
             transform: Transform::default(),
             dimensions: Vec2::splat(1.0),
-            resolution: UVec2::splat(128),
+            resolution: None,
+            rend_image: None,
             mask_image: None,
         }
     }
@@ -87,11 +89,18 @@ impl WormholeSideConfig {
         return self;
     }
 
-    /// Sets the resolution of the wormhole surface, in pixels.
-    /// Defaults to `128 x 128`.
+    /// Sets the resolution of the generated image.
+    /// Irrelevant if `with_image` is used. Defaults to the screen resolution.
     #[inline]
     pub fn with_resolution(&mut self, resolution: UVec2) -> &mut Self {
-        self.resolution = resolution;
+        self.resolution = Some(resolution);
+        return self;
+    }
+
+    /// Uses `image` as the render texture, rather than creating a new image.
+    #[inline]
+    pub fn with_image(&mut self, image: Handle<Image>) -> &mut Self {
+        self.rend_image = Some(image);
         return self;
     }
 
@@ -109,7 +118,6 @@ impl WormholeSideConfig {
 
 pub struct WormholeCameraConfig {
     transform: Transform,
-    render_target: Option<RenderTarget>,
     render_order: isize,
 }
 
@@ -118,7 +126,6 @@ impl WormholeCameraConfig {
     fn default() -> Self {
         Self {
             transform: Transform::default(),
-            render_target: None,
             render_order: -1,
         }
     }
@@ -128,14 +135,6 @@ impl WormholeCameraConfig {
     #[inline]
     pub fn with_transform(&mut self, transform: Transform) -> &mut Self {
         self.transform = transform;
-        return self;
-    }
-
-    /// Overrides the [`RenderTarget`] the wormhole camera renders to.
-    /// By default, a new `Image` asset will be created.
-    #[inline]
-    pub fn with_render_target(&mut self, target: RenderTarget) -> &mut Self {
-        self.render_target = Some(target);
         return self;
     }
 
