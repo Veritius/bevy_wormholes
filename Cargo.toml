@@ -14,7 +14,6 @@ default-features = false
 features = [
     "bevy_asset",
     "bevy_core_pipeline",
-    "bevy_pbr",
     "bevy_render"
 ]
 
