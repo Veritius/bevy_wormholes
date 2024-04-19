@@ -1,10 +1,6 @@
 use bevy::prelude::*;
 use crate::Wormhole;
 
-/// Two wormhole entities, by id.
-#[allow(missing_docs)]
-pub struct WormholePair(pub [Entity; 2]);
-
 /// The main camera used in wormhole rendering.
 /// Wormholes will be rendered to look correct from this entity's point of view.
 #[derive(Debug, Component, Reflect)]

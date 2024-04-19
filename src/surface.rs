@@ -21,8 +21,8 @@ pub struct Wormhole {
 }
 
 /// Shader for drawing wormhole surfaces.
-#[derive(Debug, Clone, Component, Asset, AsBindGroup, Reflect)]
-#[reflect(Debug, Component)]
+#[derive(Debug, Clone, Asset, AsBindGroup, Reflect)]
+#[reflect(Debug)]
 pub struct WormholeShader {
     /// The texture that the camera renders to.
     #[texture(0)]
