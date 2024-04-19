@@ -25,7 +25,7 @@ pub struct Wormhole {
 /// To work correctly, the mesh's UVs must be in a linear space ranging from `[0.0, 0.0]` to `[1.0, 1.0]`.
 #[derive(Debug, Clone, TypePath, Asset, AsBindGroup)]
 #[allow(missing_docs)]
-pub struct WormholeSurface {
+pub struct WormholeShader {
     #[texture(0)]
     #[sampler(1)]
     pub texture: Handle<Image>,
@@ -35,7 +35,7 @@ pub struct WormholeSurface {
     pub stencil: Option<Handle<Image>>,
 }
 
-impl Material for WormholeSurface {
+impl Material for WormholeShader {
     fn fragment_shader() -> ShaderRef {
         "embedded://bevy_wormholes/surface.wgsl".into()
     }
