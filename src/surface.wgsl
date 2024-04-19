@@ -11,5 +11,5 @@ fn fragment(
 ) -> @location(0) vec4<f32> {
     var color = textureSample(main_texture, main_sampler, mesh.uv);
     var mask = textureSample(stencil_texture, stencil_sampler, mesh.uv);
-    return color * mask;
+    return vec4(1.0, 0.0, 1.0, 1.0)
 }

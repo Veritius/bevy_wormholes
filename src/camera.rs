@@ -35,6 +35,6 @@ pub(super) fn camera_transform_update_system(
     wormholes: Query<&GlobalTransform, (With<Wormhole>, Without<WormholeCamera>)>,
 ) {
     for (camera, mut transform, mut global_transform) in cameras.iter_mut() {
-        todo!()
+
     }
 }

@@ -1,3 +1,4 @@
+use std::f32::consts::FRAC_PI_2;
 use bevy::{input::mouse::MouseMotion, pbr::{light_consts::lux::OVERCAST_DAY, CascadeShadowConfigBuilder}, prelude::*, window::{CursorGrabMode, PrimaryWindow}};
 use bevy_wormholes::*;
 
@@ -27,11 +28,17 @@ fn spawn_wormholes(
     });
 
     builder.orange(|c| {
-        c.with_transform(Transform::from_translation(Vec3::new(-5.0, 0.0, 0.0)));
+        let transform = Transform::from_translation(Vec3::new(-5.0, 0.0, 0.0))
+            .with_rotation(Quat::from_axis_angle(Vec3::X, -FRAC_PI_2));
+
+        c.with_transform(transform);
     });
 
     builder.blue(|c| {
-        c.with_transform(Transform::from_translation(Vec3::new(5.0, 0.0, 0.0)));
+        let transform = Transform::from_translation(Vec3::new(-5.0, 0.0, 0.0))
+            .with_rotation(Quat::from_axis_angle(Vec3::X, -FRAC_PI_2));
+
+        c.with_transform(transform);
     });
 
     let context = WormholeBuilderContext {
