@@ -1,6 +1,28 @@
+//! Advanced tools for control over rendering.
+
 use bevy::prelude::*;
 use bevy::render::extract_component::ExtractComponent;
+use bevy::render::render_graph::{Node, NodeRunError, RenderGraphContext, RenderLabel};
 use bevy::render::render_resource::{BindGroupLayout, CachedRenderPipelineId};
+use bevy::render::renderer::RenderContext;
+
+/// [`RenderLabel`] for wormhole rendering.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, RenderLabel)]
+pub struct WormholeRenderLabel;
+
+/// Rendering [`Node`] for wormhole rendering.
+pub struct WormholeRenderNode;
+
+impl Node for WormholeRenderNode {
+    fn run<'w>(
+        &self,
+        graph: &mut RenderGraphContext,
+        render_context: &mut RenderContext<'w>,
+        world: &'w World,
+    ) -> Result<(), NodeRunError> {
+        todo!()
+    }
+}
 
 /// The shader used to draw wormholes.
 #[derive(Debug, Clone, Component, ExtractComponent, Reflect)]
