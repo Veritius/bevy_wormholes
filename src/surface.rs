@@ -18,6 +18,8 @@ fn correct_usages_test() {
 pub struct Wormhole {
     /// The other side of the wormhole.
     pub counterpart: Entity,
+    /// A stencil mask for the surface's opacity.
+    pub mask: Option<Handle<Image>>,
 }
 
 /// A bundle for creating a [`Wormhole`].
@@ -72,6 +74,7 @@ impl WormholeBundle {
             visibility: VisibilityBundle::default(),
             wormhole: Wormhole {
                 counterpart: Entity::PLACEHOLDER,
+                mask: None,
             },
             mesh: meshes.add(Plane3d::new(Vec3::Y).mesh().size(dimensions.x, dimensions.y)),
             material,

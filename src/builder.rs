@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, render::camera::RenderTarget};
 
 /// A builder for wormholes. Automatically configures wormholes.
 pub struct WormholeBuilder {
@@ -57,6 +57,7 @@ pub struct WormholeSideConfig {
     transform: Transform,
     dimensions: Vec2,
     resolution: UVec2,
+    mask_image: Option<Handle<Image>>,
 }
 
 impl WormholeSideConfig {
@@ -66,30 +67,49 @@ impl WormholeSideConfig {
             transform: Transform::default(),
             dimensions: Vec2::splat(1.0),
             resolution: UVec2::splat(128),
+            mask_image: None,
         }
     }
 
+    /// Sets the [`Transform`] of the wormhole.
+    /// Defaults to [`Transform::default()`].
     #[inline]
     pub fn with_transform(&mut self, transform: Transform) -> &mut Self {
         self.transform = transform;
         return self;
     }
 
+    /// Sets the dimensions of the wormhole surface, in world units.
+    /// Defaults to `1.0 x 1.0`.
     #[inline]
     pub fn with_dimensions(&mut self, dimensions: Vec2) -> &mut Self {
         self.dimensions = dimensions;
         return self;
     }
 
+    /// Sets the resolution of the wormhole surface, in pixels.
+    /// Defaults to `128 x 128`.
     #[inline]
     pub fn with_resolution(&mut self, resolution: UVec2) -> &mut Self {
         self.resolution = resolution;
+        return self;
+    }
+
+    /// Sets a 'mask' image that will be used to define the opacity of the wormhole surface.
+    /// Your [`TextureFormat`][TextureFormat] must be a [depth or stencil format][is_depth_stencil_format].
+    /// 
+    /// [TextureFormat]: bevy::render::render_resource::TextureFormat
+    /// [is_depth_stencil_format]: bevy::render::render_resource::TextureFormat::is_depth_stencil_format
+    #[inline]
+    pub fn with_mask(&mut self, mask: Handle<Image>) -> &mut Self {
+        self.mask_image = Some(mask);
         return self;
     }
 }
 
 pub struct WormholeCameraConfig {
     transform: Transform,
+    render_target: Option<RenderTarget>,
     render_order: isize,
 }
 
@@ -98,16 +118,30 @@ impl WormholeCameraConfig {
     fn default() -> Self {
         Self {
             transform: Transform::default(),
+            render_target: None,
             render_order: -1,
         }
     }
 
+    /// Sets the [`Transform`] of the camera.
+    /// Defaults to [`Transform::default()`].
     #[inline]
     pub fn with_transform(&mut self, transform: Transform) -> &mut Self {
         self.transform = transform;
         return self;
     }
 
+    /// Overrides the [`RenderTarget`] the wormhole camera renders to.
+    /// By default, a new `Image` asset will be created.
+    #[inline]
+    pub fn with_render_target(&mut self, target: RenderTarget) -> &mut Self {
+        self.render_target = Some(target);
+        return self;
+    }
+
+    /// Sets the order at which the camera renders.
+    /// See [`Camera::order`] for more information.
+    /// Defaults to `-1`.
     #[inline]
     pub fn with_render_order(&mut self, order: isize) -> &mut Self {
         self.render_order = order;
