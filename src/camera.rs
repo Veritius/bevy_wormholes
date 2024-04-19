@@ -1,6 +1,13 @@
 use bevy::{prelude::*, render::camera::RenderTarget};
 use crate::Wormhole;
 
+/// Used as the reference point for the point of view used to render wormholes.
+/// There can be at most one entity with this component.
+/// If there are none, wormholes won't update.
+#[derive(Debug, Component, Reflect)]
+#[reflect(Debug, Component)]
+pub struct WormholeObserver;
+
 /// A camera that renders wormhole surfaces.
 /// 
 /// Entities with [`WormholeCamera`] cannot be a child entity of another entity.
@@ -65,6 +72,7 @@ pub(super) fn camera_parent_check_system(
 }
 
 pub(super) fn camera_transform_update_system(
+    observer: Query<&GlobalTransform, (With<WormholeObserver>, Without<WormholeCamera>)>,
     mut cameras: Query<(&WormholeCamera, &mut Transform, &mut GlobalTransform), Without<Wormhole>>,
     wormholes: Query<&GlobalTransform, (With<Wormhole>, Without<WormholeCamera>)>,
 ) {
