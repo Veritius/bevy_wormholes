@@ -40,7 +40,7 @@ impl WormholeShader {
 }
 
 impl Material for WormholeShader {
-    fn vertex_shader() -> ShaderRef {
+    fn fragment_shader() -> ShaderRef {
         Self::SHADER_ASSET_PATH.into()
     }
 

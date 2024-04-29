@@ -227,7 +227,7 @@ fn build_wormholes(
 
     // Attach components to the blue portal
     let blue_mesh = build_mesh(context.meshes, &builder.blue);
-    context.commands.entity(orange_id).insert((
+    context.commands.entity(blue_id).insert((
         MaterialMeshBundle {
             transform: builder.blue.transform,
             mesh: blue_mesh.clone(),
