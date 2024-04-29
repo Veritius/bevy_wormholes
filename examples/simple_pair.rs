@@ -29,14 +29,14 @@ fn spawn_wormholes(
 
     builder.orange(|c| {
         let transform = Transform::from_translation(Vec3::new(-3.5, 1.0, 0.0))
-            .with_rotation(Quat::from_axis_angle(Vec3::X, -FRAC_PI_2));
+            .with_rotation(Quat::from_axis_angle(Vec3::X, FRAC_PI_2));
 
         c.with_transform(transform);
     });
 
     builder.blue(|c| {
         let transform = Transform::from_translation(Vec3::new(3.5, 1.0, 0.0))
-            .with_rotation(Quat::from_axis_angle(Vec3::X, -FRAC_PI_2));
+            .with_rotation(Quat::from_axis_angle(Vec3::X, FRAC_PI_2));
 
         c.with_transform(transform);
     });
