@@ -16,6 +16,8 @@ pub struct WormholesPlugin;
 
 impl Plugin for WormholesPlugin {
     fn build(&self, app: &mut App) {
+        app.add_plugins(MaterialPlugin::<WormholeShader>::default());
+
         app.register_type::<Wormhole>();
         app.register_type::<WormholeCamera>();
 

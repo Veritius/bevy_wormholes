@@ -21,8 +21,7 @@ pub struct Wormhole {
 }
 
 /// Shader for drawing wormhole surfaces.
-#[derive(Debug, Clone, Asset, AsBindGroup, Reflect)]
-#[reflect(Debug)]
+#[derive(Debug, Clone, TypePath, Asset, AsBindGroup)]
 pub struct WormholeShader {
     /// The texture that the camera renders to.
     #[texture(0)]
@@ -45,7 +44,7 @@ impl Material for WormholeShader {
         Self::SHADER_ASSET_PATH.into()
     }
 
-    fn fragment_shader() -> ShaderRef {
-        Self::SHADER_ASSET_PATH.into()
+    fn alpha_mode(&self) -> AlphaMode {
+        AlphaMode::Opaque
     }
 }
