@@ -20,4 +20,4 @@ features = [
 
 [dev-dependencies.bevy]
 version = "0.13"
-features = ["bevy_winit", "x11"]
+features = ["bevy_gizmos", "bevy_winit", "x11"]

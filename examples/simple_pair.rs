@@ -10,7 +10,7 @@ fn main() {
     app.add_plugins((DefaultPlugins, WormholesPlugin));
 
     app.add_systems(Startup, (spawn_wormholes, spawn_props, setup_camera));
-    app.add_systems(Update, flycam_system);
+    app.add_systems(Update, (flycam_system, camera_gizmos));
 
     app.run();
 }
@@ -199,4 +199,13 @@ fn flycam_system(
 
     // Apply movement
     transform.translation += movement * CAMERA_MOVE_SPEED;
+}
+
+fn camera_gizmos(
+    mut gizmos: Gizmos,
+    cameras: Query<&GlobalTransform, With<WormholeCamera>>,
+) {
+    for transform in cameras.iter() {
+        gizmos.sphere(transform.translation(), Quat::IDENTITY, 0.2, Color::GOLD);
+    }
 }

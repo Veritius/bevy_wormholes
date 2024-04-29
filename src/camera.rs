@@ -8,6 +8,7 @@ use crate::Wormhole;
 pub struct WormholeObserver;
 
 /// A camera that renders wormhole surfaces.
+/// Exists as the counterpart to a [`WormholeObserver`].
 /// 
 /// Entities with [`WormholeCamera`] cannot be a child entity of another entity.
 /// If this occurs, it'll be detected, an error will be logged, and the parent will be detached.
@@ -30,7 +31,7 @@ pub(super) fn camera_parent_check_system(
 }
 
 pub(super) fn camera_transform_update_system(
-    observer: Query<&GlobalTransform, (With<WormholeObserver>, Without<WormholeCamera>)>,
+    observers: Query<&GlobalTransform, (With<WormholeObserver>, Without<WormholeCamera>)>,
     mut cameras: Query<(&WormholeCamera, &mut Transform, &mut GlobalTransform), Without<Wormhole>>,
     wormholes: Query<&GlobalTransform, (With<Wormhole>, Without<WormholeCamera>)>,
 ) {
