@@ -5,7 +5,10 @@ use crate::Wormhole;
 /// Wormholes will be rendered to look correct from this entity's point of view.
 #[derive(Debug, Component, Reflect)]
 #[reflect(Debug, Component)]
-pub struct WormholeObserver;
+pub struct WormholeObserver {
+    /// The attached [`WormholeCamera`].
+    pub counterpart: Entity,
+}
 
 /// A camera that renders wormhole surfaces.
 /// Exists as the counterpart to a [`WormholeObserver`].
@@ -31,11 +34,11 @@ pub(super) fn camera_parent_check_system(
 }
 
 pub(super) fn camera_transform_update_system(
-    observers: Query<&GlobalTransform, (With<WormholeObserver>, Without<WormholeCamera>)>,
+    observers: Query<(&GlobalTransform, &WormholeObserver), Without<WormholeCamera>>,
+    wormholes: Query<(&GlobalTransform, &Wormhole), Without<WormholeCamera>>,
     mut cameras: Query<(&WormholeCamera, &mut Transform, &mut GlobalTransform), Without<Wormhole>>,
-    wormholes: Query<&GlobalTransform, (With<Wormhole>, Without<WormholeCamera>)>,
 ) {
-    for (camera, mut transform, mut global_transform) in cameras.iter_mut() {
+    for (global_transform, wormhole_observer) in observers.iter() {
 
     }
 }

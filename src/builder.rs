@@ -1,9 +1,9 @@
 use bevy::{pbr::NotShadowCaster, prelude::*, render::{camera::RenderTarget, render_resource::{Extent3d, TextureDescriptor, TextureDimension, TextureFormat}, texture::BevyDefault}};
-
 use crate::{Wormhole, WormholeCamera, WormholeShader, WORMHOLE_TEXTURE_USAGES};
 
 /// A builder for wormholes. Automatically configures wormholes.
 pub struct WormholeBuilder {
+    observer: Option<Entity>,
     camera: WormholeCameraConfig,
     orange: WormholeSideConfig,
     blue: WormholeSideConfig,
@@ -13,6 +13,7 @@ impl WormholeBuilder {
     /// Creates a new [`WormholeBuilder`].
     pub fn new() -> Self {
         Self {
+            observer: None,
             camera: WormholeCameraConfig::default(),
             orange: WormholeSideConfig::default(),
             blue: WormholeSideConfig::default(),
@@ -22,6 +23,11 @@ impl WormholeBuilder {
     /// Consumes the builder, applying the changes to the [`World`].
     pub fn build(self, context: WormholeBuilderContext) -> Result<BuiltWormholeData, ()> {
         build_wormholes(self, context)
+    }
+
+    /// Sets the observer entity (the main camera)
+    pub fn set_observer(&mut self, entity: Entity) {
+        self.observer = Some(entity);
     }
 
     /// Individually configure the wormhole camera.
@@ -185,6 +191,12 @@ fn build_wormholes(
     builder: WormholeBuilder,
     context: WormholeBuilderContext,
 ) -> Result<BuiltWormholeData, ()> {
+    // Get the observer id
+    let observer_id = match builder.observer {
+        Some(val) => val,
+        None => { return Err(()); },
+    };
+
     // Generate ids early since entities reference eachother
     let camera_id = context.commands.spawn_empty().id();
     let orange_id = context.commands.spawn_empty().id();
