@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::{camera::RenderTarget, render_resource::{Extent3d, TextureDescriptor, TextureDimension, TextureFormat}, texture::BevyDefault}};
+use bevy::{pbr::NotShadowCaster, prelude::*, render::{camera::RenderTarget, render_resource::{Extent3d, TextureDescriptor, TextureDimension, TextureFormat}, texture::BevyDefault}};
 
 use crate::{Wormhole, WormholeCamera, WormholeShader, WORMHOLE_TEXTURE_USAGES};
 
@@ -219,6 +219,7 @@ fn build_wormholes(
             }),
             ..default()
         },
+        NotShadowCaster,
         Wormhole {
             counterpart: blue_id,
         },
@@ -236,6 +237,7 @@ fn build_wormholes(
             }),
             ..default()
         },
+        NotShadowCaster,
         Wormhole {
             counterpart: orange_id
         },

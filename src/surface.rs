@@ -24,13 +24,13 @@ pub struct Wormhole {
 #[derive(Debug, Clone, TypePath, Asset, AsBindGroup)]
 pub struct WormholeShader {
     /// The texture that the camera renders to.
-    #[texture(0)]
-    #[sampler(1)]
+    #[sampler(0)]
+    #[texture(1)]
     pub texture: Handle<Image>,
 
     /// A stencil mask that hides parts of the texture.
-    #[texture(2)]
-    #[sampler(3)]
+    #[sampler(2)]
+    #[texture(3)]
     pub stencil: Option<Handle<Image>>,
 }
 

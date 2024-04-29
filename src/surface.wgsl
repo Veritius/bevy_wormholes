@@ -1,9 +1,9 @@
 #import bevy_pbr::forward_io::VertexOutput
 
-@group(0) @binding(0) var main_texture: texture_2d<f32>;
-@group(0) @binding(1) var main_sampler: sampler;
-@group(0) @binding(2) var stencil_texture: texture2d<f32>;
-@group(0) @binding(3) var stencil_sampler: sampler;
+@group(2) @binding(0) var main_sampler: sampler;
+@group(2) @binding(1) var main_texture: texture_2d<f32>;
+@group(2) @binding(2) var stencil_sampler: sampler;
+@group(2) @binding(3) var stencil_texture: texture2d<f32>;
 
 @fragment
 fn fragment(
